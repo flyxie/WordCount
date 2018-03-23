@@ -38,7 +38,12 @@ public class wc {
 					System.out.println(tmp);
 					sList.add(tmp);
 				}
-
+				else if(args[i].equals("-a"))
+				{
+					tmp = new String(wc.countA(fileName));
+					System.out.println(tmp);
+					sList.add(tmp);
+				}
 			
 
 			int outputSign = 0;
@@ -72,6 +77,7 @@ public class wc {
 		int c;
 		try {
 			BufferedReader in = new BufferedReader(new FileReader(fileName));
+			
 			while((s=in.readLine())!=null)
 				count+=s.length();
 			in.close();
@@ -130,6 +136,35 @@ public class wc {
 	}
 	
 	
+	//返回代码行 / 空行 / 注释行
+	public String countA(String fileName)
+	{
+		int count=0,space=0,h=0;
+		String s;
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(fileName));
+			while((s = in.readLine())!=null)
+			{
+				if(s.isEmpty() || s.trim().length()<=1) ++space;
+				else
+				{
+					int t=0;
+					while(t<s.length()&&s.charAt(t)==' ') ++t;
+					if((t+1<s.length() && s.charAt(t)=='/' && s.charAt(t+1)=='/')
+							|| (t+2<s.length() && s.charAt(t+1)=='/' && s.charAt(t+2)=='/')) ++h;
+					else
+						++count;
+				}
+			}
+			in.close();
+		} catch (FileNotFoundException e1) {
+			System.out.println("找不到文件!!!");
+			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return fileName+" 代码行数/空行数/注释行数:"+count+"/"+space+"/"+h;
+	}
 	
 	//将结果输出到指定文件outputFile.txt，文件名可自定义
 	public void writeFile(String fileName)
